@@ -1,0 +1,24 @@
+# This script cleans and corrects spatial data geometries in a single workflow.
+
+ The following geometry issues are handled:
+ 1. Fixing and removing invalid geometries.
+ 2. Removing duplicate geometries within the same layer.
+ 3. Detecting and resolving overlapping geometries within a layer.
+
+ A tolerance of 0.000000009 is used to represent 0.01 meters.
+ Since the input data is in EPSG:4326, geometries are reprojected
+ to EPSG:3857 to perform accurate distance-based operations.
+
+ The workflow is applied irrespective of the input layer:
+ - Invalid geometries are fixed.
+ - Duplicate geometries are removed.
+ - A self-intersection check is performed.
+
+The output is split into two layers:
+ - One layer containing polygons that intersect with other polygons.
+ - One layer containing polygons with no intersections.
+
+ For intersecting polygons:
+ - A difference operation is applied to remove overlapping areas.
+ - The resulting geometry is buffered by 0.01 meters to avoid
+   edge and vertex overlaps, especially in narrow polygon sections.
